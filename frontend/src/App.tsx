@@ -13,7 +13,10 @@ function App() {
 
   return (
     <div>
-      <h1>MonkeyGrams</h1>
+      <div className="title">
+        <h1>MonkeyGrams</h1>
+        <p><em>By Lauren and Lucian</em></p>
+      </div>
       <HomePageButtons />
     </div>
   )

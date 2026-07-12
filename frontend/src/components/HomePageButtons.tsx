@@ -1,8 +1,7 @@
 function HomePageButtons() {
 
   function typeRoomCode(event: React.ChangeEvent<HTMLInputElement>) {
-    const roomCode = event.target.value.toUpperCase();
-    event.target.value = roomCode;
+    event.target.value = event.target.value.toUpperCase();
   }
 
   return (
