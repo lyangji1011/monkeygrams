@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import HomePageButtons from './components/HomePageButtons'
 
 function App() {
   const [message, setMessage] = useState('')
@@ -12,7 +13,8 @@ function App() {
 
   return (
     <div>
-      <h1>Frontend (Vite + React)</h1>
+      <h1>MonkeyGrams</h1>
+      <HomePageButtons />
       <p>Backend says: {message || "Loading..."}</p>
     </div>
   )
