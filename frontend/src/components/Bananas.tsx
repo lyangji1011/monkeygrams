@@ -12,14 +12,10 @@ function Bananas() {
 
   const [bananas, setBananas] = useState<Banana[]>([]);
 
-  useEffect(() => {
-    console.log(bananas);
-  }, [bananas]);
-  
   function spawnBanana() {
     const newBanana = {
       id: Date.now(),
-      x: Math.random() * window.innerWidth,
+      x: Math.random() * (window.innerWidth - 200) + 100,
       y: window.innerHeight + 100,
       scale: Math.random() * 0.5 + 0.5,
       rotation: Math.random() * 360,
@@ -34,6 +30,17 @@ function Bananas() {
 
   useEffect(onMount, []);
 
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      const key = event.key.toUpperCase();
+      if (key === 'B') {
+        spawnBanana();
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [])
 
   return (
     <div className="bananas">
