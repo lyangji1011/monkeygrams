@@ -1,13 +1,22 @@
 body {
   margin: 0;
-  display: flex;
-  justify-content: center;
   background-color: #fff98d;
-  align-items: center;
   text-align: center;
   font-family: Arial, sans-serif;
   min-height: 100vh;
-  overflow: hidden;
+  overflow: auto;
+}
+
+#root {
+  min-height: 100vh;
+  width: 100%;
+}
+
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 button {
@@ -35,8 +44,8 @@ input[type="text"]:focus {
 }
 
 .title {
-  margin-bottom: 40%;
-  margin-top: -40%;
+  margin-bottom: 10%;
+  margin-top: 10%;
   font-size: 28px;
 }
 
@@ -93,4 +102,39 @@ button:hover {
   to {
     transform: translate(var(--x), var(--y)) translateY(-140vh) scale(var(--banana-scale, 1)) rotate(var(--banana-rotation, 0deg));
   }
+}
+
+.tilemap {
+  margin-top: 9%;
+  width: max-content;
+  margin-left: auto;
+  margin-right: auto;
+  overflow: visible;
+}
+
+.tile {
+  width: clamp(44px, 2vw, 48px);
+  height: clamp(44px, 2vw, 48px);
+  border: 4px outset #fbf7ab;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 32px;
+  color: #2e2204;
+  background-color: #fffcbf;
+  border-radius: 8px;
+}
+
+.tile-empty {
+  width: clamp(50px, 2vw, 54px);
+  height: clamp(50px, 2vw, 54px);
+  border: 1px dashed #c6c494;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tile-row {
+  display: flex;
+  justify-content: center;
 }
