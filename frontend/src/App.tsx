@@ -1,5 +1,6 @@
 // import { useEffect, useState } from 'react'
 import HomePageButtons from './components/HomePageButtons'
+import Bananas from './components/Bananas'
 
 function App() {
   // const [message, setMessage] = useState('')
@@ -13,6 +14,7 @@ function App() {
 
   return (
     <div>
+      <Bananas />
       <div className="title">
         <h1>MonkeyGrams</h1>
         <p><em>By Lauren and Lucian</em></p>
