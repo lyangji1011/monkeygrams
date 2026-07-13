@@ -20,7 +20,6 @@ function App() {
         <p><em>By Lauren and Lucian</em></p>
       </div>
       <HomePageButtons />
-      <span className="footer"></span>
     </div>
   )
 }

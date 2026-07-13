@@ -97,15 +97,7 @@ button:hover {
   left: 0;
   top: 0;
   transform: translate(var(--x), var(--y)) scale(var(--banana-scale, 1)) rotate(var(--banana-rotation, 0deg));
-  animation: banana-drift 5s;
-  animation-fill-mode: forwards;
   will-change: transform;
-}
-
-@keyframes banana-drift {
-  to {
-    transform: translate(var(--x), var(--y)) translateY(101vh) scale(var(--banana-scale, 1)) rotate(var(--banana-rotation, 0deg));
-  }
 }
 
 .tilemap {
@@ -141,13 +133,4 @@ button:hover {
 .tile-row {
   display: flex;
   justify-content: center;
-}
-
-.footer {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  background-color: rgb(189, 187, 113);
-  padding: 10px;
-  box-sizing: border-box;
 }
