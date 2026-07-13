@@ -4,7 +4,7 @@ body {
   text-align: center;
   font-family: Arial, sans-serif;
   min-height: 100vh;
-  overflow: auto;
+  overflow: hidden;
 }
 
 #root {
@@ -16,7 +16,11 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
+  gap: 16px;
+  padding: 24px 0;
+  box-sizing: border-box;
 }
 
 button {
@@ -44,8 +48,7 @@ input[type="text"]:focus {
 }
 
 .title {
-  margin-bottom: 10%;
-  margin-top: 10%;
+  margin: 0;
   font-size: 28px;
 }
 
@@ -95,12 +98,13 @@ button:hover {
   top: 0;
   transform: translate(var(--x), var(--y)) scale(var(--banana-scale, 1)) rotate(var(--banana-rotation, 0deg));
   animation: banana-drift 5s;
+  animation-fill-mode: forwards;
   will-change: transform;
 }
 
 @keyframes banana-drift {
   to {
-    transform: translate(var(--x), var(--y)) translateY(-140vh) scale(var(--banana-scale, 1)) rotate(var(--banana-rotation, 0deg));
+    transform: translate(var(--x), var(--y)) translateY(101vh) scale(var(--banana-scale, 1)) rotate(var(--banana-rotation, 0deg));
   }
 }
 
@@ -128,7 +132,7 @@ button:hover {
 .tile-empty {
   width: clamp(50px, 2vw, 54px);
   height: clamp(50px, 2vw, 54px);
-  border: 1px dashed #c6c494;
+  border: 1px dashed rgb(189, 187, 113);;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -137,4 +141,13 @@ button:hover {
 .tile-row {
   display: flex;
   justify-content: center;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: rgb(189, 187, 113);
+  padding: 10px;
+  box-sizing: border-box;
 }

@@ -13,11 +13,12 @@ function Bananas() {
   const [bananas, setBananas] = useState<Banana[]>([]);
 
   function spawnBanana() {
+    setBananas((currentBananas) => currentBananas.length > 100 ? currentBananas.slice(1) : currentBananas);
     const newBanana = {
       id: Date.now(),
-      x: Math.random() * (window.innerWidth - 200) + 100,
-      y: window.innerHeight + 100,
-      scale: Math.random() * 0.5 + 0.5,
+      x: Math.random() * (window.innerWidth - 200) + 50,
+      y: -100,
+      scale: Math.random() * 0.3 + 0.6,
       rotation: Math.random() * 360,
     };
     setBananas((currentBananas) => [...currentBananas, newBanana]);

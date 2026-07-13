@@ -13,13 +13,14 @@ function App() {
   // }, [])
 
   return (
-    <div>
+    <div className="page">
       <Bananas />
       <div className="title">
         <h1>MonkeyGrams</h1>
         <p><em>By Lauren and Lucian</em></p>
       </div>
       <HomePageButtons />
+      <span className="footer"></span>
     </div>
   )
 }
