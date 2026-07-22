@@ -1,4 +1,3 @@
-
 function Tile({ letter }: { letter: string }) {
   
   return (

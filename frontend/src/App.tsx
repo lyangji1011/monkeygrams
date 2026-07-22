@@ -1,25 +1,22 @@
-// import { useEffect, useState } from 'react'
-import HomePageButtons from './components/HomePageButtons'
-import Bananas from './components/Bananas'
+import { useLayoutEffect } from 'react'
+import TileMap from './components/TileMap'
+import GameHeader from './components/GameHeader'
 
 function App() {
-  // const [message, setMessage] = useState('')
-
-  // useEffect(() => {
-  //   fetch('/api/message')
-  //     .then((res) => res.json())
-  //     .then((data) => setMessage(data.message))
-  //     .catch((err) => console.error(err))
-  // }, [])
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
 
   return (
     <div className="page">
-      <Bananas />
+      {/* <Bananas />
       <div className="title">
         <h1>MonkeyGrams</h1>
         <p><em>By Lauren and Lucian</em></p>
       </div>
-      <HomePageButtons />
+      <HomePageButtons /> */}
+      <GameHeader />
+      <TileMap />
     </div>
   )
 }
