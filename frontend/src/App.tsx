@@ -1,7 +1,6 @@
 import { useLayoutEffect } from 'react'
 import Bananas from './components/Bananas'
 import HomePageButtons from './components/HomePageButtons'
-import GamePage from './components/GamePage'
 
 function App() {
   // Force user to top of page on reload
@@ -21,4 +20,4 @@ function App() {
   )
 }
 
-export default App
+export default App;
