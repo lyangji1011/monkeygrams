@@ -10,6 +10,7 @@ function HomePageButtons() {
         <input type="text" placeholder="Room Code" maxLength={4} onChange={typeRoomCode} />
         <button>Join</button>
       </div>
+      or
       <div className="create-room">
         <button>Create Room</button>
       </div>

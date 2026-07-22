@@ -107,21 +107,26 @@ button:hover {
   touch-action: none;
   user-select: none;
   -webkit-user-select: none;
+  cursor: grab;
   border: 2px dashed rgb(189, 187, 113);
+}
+
+.tilemap:active {
+  cursor: grabbing;
 }
 
 .tilemap-stage {
   position: absolute;
   left: 50%;
-  top: 20%;
+  top: 10%;
   transform: translateX(-50%);
   width: max-content;
   z-index: 1;
 }
 
 .tile {
-  width: clamp(44px, 2vw, 48px);
-  height: clamp(44px, 2vw, 48px);
+  width: 44px;
+  height: 44px;
   border: 4px outset #fbf7ab;
   display: flex;
   justify-content: center;
@@ -130,11 +135,26 @@ button:hover {
   color: #2e2204;
   background-color: #fffcbf;
   border-radius: 8px;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.selected_tile {
+  background-color: rgb(189, 187, 113);
+}
+
+.tile:active {
+  pointer-events: none; 
+  cursor: grabbing;
+  z-index: 1000;
 }
 
 .tile-empty {
-  width: clamp(44px, 2vw, 48px);
-  height: clamp(44px, 2vw, 48px);
+  width: 44px;
+  height: 44px;
   border: 1px dashed rgb(189, 187, 113);
   padding: 3.3333px;
   display: flex;
@@ -153,7 +173,7 @@ button:hover {
   top: 0;
   left: 0;
   background-color: rgb(189, 187, 113);
-  height: 20%;
+  height: 10%;
   box-shadow: 0px 8px 6px rgba(0, 0, 0, 0.1);
   z-index: 2;
   display: flex;

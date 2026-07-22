@@ -1,8 +1,10 @@
 import { useLayoutEffect } from 'react'
-import TileMap from './components/TileMap'
-import GameHeader from './components/GameHeader'
+import Bananas from './components/Bananas'
+import HomePageButtons from './components/HomePageButtons'
+import GamePage from './components/GamePage'
 
 function App() {
+  // Force user to top of page on reload
   useLayoutEffect(() => {
     window.scrollTo(0, 0)
   }, [])
@@ -15,8 +17,7 @@ function App() {
         <p><em>By Lauren and Lucian</em></p>
       </div>
       <HomePageButtons /> */}
-      <GameHeader />
-      <TileMap />
+      <GamePage />
     </div>
   )
 }
