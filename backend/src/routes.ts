@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createRoom, joinRoom } from "./routes/rooms.js";
+import { createRoom } from "./routes/rooms.js";
 
 const router = Router();
 
@@ -11,10 +11,8 @@ router.get("/message", (req, res) => {
 
 router.post("/rooms", (req, res) => {
 	const roomCode = createRoom();
-	const joinedRoom = joinRoom(roomCode);
 	res.status(201).json({
 		code: roomCode,
-		username: joinedRoom?.username,
 	});
 });
 

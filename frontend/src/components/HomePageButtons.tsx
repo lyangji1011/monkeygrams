@@ -19,8 +19,6 @@ function HomePageButtons() {
 			}
 
 			const data = await response.json();
-			setRoomCode(data.code);
-			localStorage.setItem(`monkeygrams-room-${data.code}`, data.username);
 			navigate(`/rooms/${data.code}`);
 		} catch (error) {
 			console.error(error);

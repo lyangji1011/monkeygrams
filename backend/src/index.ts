@@ -3,6 +3,7 @@ import app from "./app.js";
 import { Server } from "socket.io";
 import {
 	checkValidRoom,
+	getRoom,
 	getRoomPlayers,
 	joinRoom,
 	leaveRoomBySocketId,
@@ -27,7 +28,7 @@ io.on("connection", (socket) => {
 			return;
 		}
 
-		const joinedRoom = joinRoom(roomCode, username, socket.id);
+		const joinedRoom = joinRoom(roomCode, socket.id, username ?? null);
 
 		if (!joinedRoom) {
 			socket.emit("room-error", { message: "room not found" });
@@ -45,6 +46,19 @@ io.on("connection", (socket) => {
 		socket.to(roomCode).emit("room-players", {
 			players: getRoomPlayers(roomCode),
 		});
+	});
+
+	socket.on("set-ready", ({ roomCode, ready }) => {
+		const room = getRoom(roomCode);
+		if (!room) return;
+
+    const player = room.players.get(socket.id);
+    if (!player) return;
+
+    player.isReady = ready;
+    io.to(roomCode).emit("room-players", {
+      players: getRoomPlayers(roomCode),
+    });
 	});
 
 	socket.on("disconnect", () => {

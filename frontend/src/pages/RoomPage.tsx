@@ -1,12 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { io } from "socket.io-client";
+import { Socket, io } from "socket.io-client";
+import type { Player } from "../../../shared/types/player";
 
 export default function RoomPage() {
+	const socketRef = useRef<Socket | null>(null);
 	const { roomCode } = useParams();
 	const navigate = useNavigate();
 	const [username, setUsername] = useState("");
-	const [players, setPlayers] = useState<string[]>([]);
+	const [players, setPlayers] = useState<Player[]>([]);
+	const currentPlayer = players.find((player) => player.username === username);
+	console.log(currentPlayer?.isReady);
 	const apiUrl = import.meta.env.VITE_API_URL ?? "http://localhost:5001";
 	const roomStorageKey = roomCode
 		? `monkeygrams-room-${roomCode}`
@@ -17,8 +21,11 @@ export default function RoomPage() {
 		alert("copied!");
 	};
 
-	const startGame = () => {
-		console.log("start game");
+	const setReadiness = (ready: boolean) => {
+		socketRef.current?.emit("set-ready", {
+			roomCode,
+			ready,
+		});
 	};
 
 	useEffect(() => {
@@ -29,6 +36,7 @@ export default function RoomPage() {
 
 		const savedUsername = localStorage.getItem(roomStorageKey);
 		const socket = io(apiUrl);
+		socketRef.current = socket;
 
 		socket.on("connect", () => {
 			socket.emit("join-room", {
@@ -53,6 +61,7 @@ export default function RoomPage() {
 
 		return () => {
 			socket.disconnect();
+			socketRef.current = null;
 		};
 	}, [apiUrl, navigate, roomCode, roomStorageKey]);
 
@@ -64,11 +73,18 @@ export default function RoomPage() {
 			<div>players:</div>
 			<ul>
 				{players.map((player) => (
-					<li key={player}>{player}</li>
+					<li key={player.username}>
+						{player.username}: {player.isReady ? "ready" : "not ready"}
+					</li>
 				))}
 			</ul>
 			<button onClick={copyInviteLink}>copy invite link</button>
-			<button onClick={startGame}>start game</button>
+			{currentPlayer?.isReady ? (
+				<button onClick={() => setReadiness(false)}>ready</button>
+			) : (
+				<button onClick={() => setReadiness(true)}>not ready</button>
+			)}
+			<button>start</button>
 		</div>
 	);
 }
