@@ -1,11 +1,12 @@
 import PlayerPile from './PlayerPile.tsx'
 import PlayerActionZone from './PlayerActionZone.tsx'
+import type { TileData } from '../utils/TileData.ts';
 
-function GameHeader({ onDropTile, playerPileTiles }: { onDropTile: (tile: string) => void; playerPileTiles: string[] | null }) {
+function GameHeader({ onPlaceTile, playerPileTiles }: { onPlaceTile: (tile: TileData) => void; playerPileTiles: TileData[] | null }) {
   
   return (
     <div className="game-header">
-      <PlayerPile onDropTile={onDropTile} playerPileTiles={playerPileTiles} />
+      <PlayerPile onPlaceTile={onPlaceTile} playerPileTiles={playerPileTiles} />
       <PlayerActionZone />
     </div>
   )
