@@ -1,41 +1,74 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { io } from "socket.io-client";
 
 export default function RoomPage() {
-  const { roomCode } = useParams();
-  const navigate = useNavigate();
-  const [username, setUsername] = useState("");
-  const location = useLocation();
+	const { roomCode } = useParams();
+	const navigate = useNavigate();
+	const [username, setUsername] = useState("");
+	const [players, setPlayers] = useState<string[]>([]);
+	const apiUrl = import.meta.env.VITE_API_URL ?? "http://localhost:5001";
+	const roomStorageKey = roomCode
+		? `monkeygrams-room-${roomCode}`
+		: "monkeygrams-room";
 
-  useEffect(() => {
-    const fetchAndSetUsername = async() => {
-      console.log("hi")
-      const response = await fetch("/api/names", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ roomCode: roomCode })
-      });
-      const data = await response.json();
-      if (!response.ok) {
-        navigate("/");
-        return;
-      }
-      console.log('new user ' + data.username);
-      setUsername(data.username);
-    }
+	const copyInviteLink = () => {
+		navigator.clipboard.writeText(window.location.href);
+		alert("copied!");
+	};
 
-    const stateName = location.state?.name;
-    if (stateName) {
-      setUsername(stateName);
-      console.log(stateName);
-    } else {
-      fetchAndSetUsername();
-    }
-  }, [])
+	const startGame = () => {
+		console.log("start game");
+	};
 
-  return (
-    <div> room</div>
-  )
+	useEffect(() => {
+		if (!roomCode) {
+			navigate("/");
+			return;
+		}
+
+		const savedUsername = localStorage.getItem(roomStorageKey);
+		const socket = io(apiUrl);
+
+		socket.on("connect", () => {
+			socket.emit("join-room", {
+				roomCode,
+				username: savedUsername,
+			});
+		});
+
+		socket.on("room-joined", ({ username, players }) => {
+			setUsername(username);
+			setPlayers(players);
+			localStorage.setItem(roomStorageKey, username);
+		});
+
+		socket.on("room-players", ({ players }) => {
+			setPlayers(players);
+		});
+
+		socket.on("room-error", () => {
+			navigate("/");
+		});
+
+		return () => {
+			socket.disconnect();
+		};
+	}, [apiUrl, navigate, roomCode, roomStorageKey]);
+
+	return (
+		<div>
+			<div>room</div>
+			<div>your name: {username}</div>
+			<div>room code: {roomCode}</div>
+			<div>players:</div>
+			<ul>
+				{players.map((player) => (
+					<li key={player}>{player}</li>
+				))}
+			</ul>
+			<button onClick={copyInviteLink}>copy invite link</button>
+			<button onClick={startGame}>start game</button>
+		</div>
+	);
 }
