@@ -30,18 +30,25 @@ function HomePageButtons() {
 		setRoomCode(upperCaseRoomCode);
 	}
 
-  return (
-    <div>
-      <div className="join-room">
-        <input type="text" placeholder="Room Code" maxLength={6} onChange={typeRoomCode} />
-        <button onClick={() => roomCode && navigate(`/rooms/${roomCode}`)}>Join</button>
-      </div>
-      or
-      <div className="create-room">
-        <button onClick={handleCreateRoom}>Create Room</button>
-      </div>
-    </div>
-  )
+	return (
+		<div>
+			<div className="join-room">
+				<input
+					type="text"
+					placeholder="Room Code"
+					maxLength={6}
+					onChange={typeRoomCode}
+				/>
+				<button onClick={() => roomCode && navigate(`/rooms/${roomCode}`)}>
+					Join
+				</button>
+			</div>
+			or
+			<div className="create-room">
+				<button onClick={handleCreateRoom}>Create Room</button>
+			</div>
+		</div>
+	);
 }
 
 export default HomePageButtons;
