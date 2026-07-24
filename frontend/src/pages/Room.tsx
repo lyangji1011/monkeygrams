@@ -4,6 +4,7 @@ import { Socket, io } from "socket.io-client";
 import type { Player } from "../../../shared/types/player";
 import { RoomState } from "../../../shared/types/room";
 import Lobby from "./Lobby";
+import GamePage from "../components/GamePage";
 
 export default function RoomPage() {
 	const socketRef = useRef<Socket | null>(null);
@@ -73,7 +74,7 @@ export default function RoomPage() {
 					socketRef={socketRef}
 				/>
 			)}
-			{roomState === RoomState.PLAYING && <p>tiles</p>}
+			{roomState === RoomState.PLAYING && <GamePage />}
 		</>
 	);
 }

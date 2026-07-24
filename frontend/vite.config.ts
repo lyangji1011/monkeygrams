@@ -6,6 +6,9 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [react()],
+    define: {
+      'process.env': '{}',
+    },
     server: {
       proxy: {
         "/api": {
@@ -16,29 +19,3 @@ export default defineConfig(({ mode }) => {
     },
   };
 });
-
-
-// import { defineConfig } from "vite";
-// import react from "@vitejs/plugin-react";
-
-// // https://vite.dev/config/
-// export default defineConfig({
-// // <<<<<<< Updated upstream
-//   plugins: [react()],
-//   define: {
-//     'process.env': '{}',
-//     'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV ?? "http://localhost:5001"),
-//   },
-// })
-// // =======
-// // 	plugins: [react()],
-// // 	server: {
-// // 		proxy: {
-// // 			"/api": {
-// // 				target: "http://localhost:5001",
-// // 				changeOrigin: true,
-// // 			},
-// // 		},
-// // 	},
-// // });
-// // >>>>>>> Stashed changes
