@@ -1,6 +1,6 @@
 import { usernames } from "../data/usernames.js";
 import { ServerPlayer, Username } from "../types/player.js";
-import { Room, RoomCode, SocketId } from "../types/room.js";
+import { Room, RoomCode, RoomState, SocketId } from "../types/room.js";
 
 const rooms = new Map<RoomCode, Room>();
 const socketRooms = new Map<SocketId, RoomCode>();
@@ -18,6 +18,7 @@ export function createRoom() {
 
 	rooms.set(roomCode, {
 		players: new Map(),
+    state: RoomState.LOBBY,
 	});
 	return roomCode;
 }

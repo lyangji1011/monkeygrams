@@ -8,6 +8,7 @@ import {
 	joinRoom,
 	leaveRoomBySocketId,
 } from "./routes/rooms.js";
+import { RoomState } from "./types/room.js";
 
 const PORT = process.env.PORT || 5001;
 
@@ -52,13 +53,25 @@ io.on("connection", (socket) => {
 		const room = getRoom(roomCode);
 		if (!room) return;
 
-    const player = room.players.get(socket.id);
-    if (!player) return;
+		const player = room.players.get(socket.id);
+		if (!player) return;
 
-    player.isReady = ready;
-    io.to(roomCode).emit("room-players", {
-      players: getRoomPlayers(roomCode),
-    });
+		player.isReady = ready;
+		io.to(roomCode).emit("room-players", {
+			players: getRoomPlayers(roomCode),
+		});
+	});
+
+	socket.on("start-game", ({ roomCode }) => {
+		const room = getRoom(roomCode);
+		if (!room) return;
+
+		console.log("starting game");
+
+		room.state = RoomState.PLAYING;
+		io.to(roomCode).emit("room-state", {
+			state: room.state,
+		});
 	});
 
 	socket.on("disconnect", () => {
