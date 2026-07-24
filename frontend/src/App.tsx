@@ -11,13 +11,12 @@ function App() {
 
   return (
     <div className="page">
-      {/* <Bananas />
+      <Bananas />
       <div className="title">
         <h1>MonkeyGrams</h1>
         <p><em>By Lauren and Lucian</em></p>
       </div>
-      <HomePageButtons /> */}
-      <GamePage />
+      <HomePageButtons />
     </div>
   )
 }
