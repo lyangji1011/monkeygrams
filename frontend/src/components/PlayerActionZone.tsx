@@ -2,8 +2,8 @@ function PlayerActionZone() {
   
   return (
     <div className="player-action-zone">
-        PlayerActionZone
-    </div>
+      <div className="dump-zone">DUMP ZONE</div>
+      </div>
   )
 
 }
