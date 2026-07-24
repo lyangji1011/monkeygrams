@@ -142,12 +142,8 @@ button:hover {
   -ms-user-select: none;
 }
 
-.selected_tile {
-  background-color: rgb(189, 187, 113);
-}R
-
 .tile:active {
-  pointer-events: none; 
+  pointer-events: none;
   cursor: grabbing;
   z-index: 3;
 }
