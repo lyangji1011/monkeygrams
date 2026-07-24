@@ -144,12 +144,12 @@ button:hover {
 
 .selected_tile {
   background-color: rgb(189, 187, 113);
-}
+}R
 
 .tile:active {
   pointer-events: none; 
   cursor: grabbing;
-  z-index: 1000;
+  z-index: 3;
 }
 
 .tile-empty {

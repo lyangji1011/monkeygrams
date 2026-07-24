@@ -34,11 +34,25 @@ function TileMap({ updatedTile, onPlaceTile, addTileToPlayerPile }: { updatedTil
       });
     }
 
-    const selected_r = selectedTileRef.current[0];
-    const selected_c = selectedTileRef.current[1];
+    let selected_r = selectedTileRef.current[0];
+    let selected_c = selectedTileRef.current[1];
 
-    // Place tile in new location if valid
-    if (selected_r >= 0 && selected_c >= 0 && tiles.get(getTileKey(selected_r, selected_c)) === undefined) {
+    console.log('old:', updatedTile.r, updatedTile.c, '-> new:', selected_r, selected_c);
+
+    // Placed in invalid spot
+    if (selected_r === -1 && selected_c === -1 &&
+        (updatedTile.r !== -1 || updatedTile.c !== -1)) {
+      selected_r = updatedTile.r;
+      selected_c = updatedTile.c;
+    }
+
+    // Place tile in new location if valid, or back in original spot if dropped there
+    // But don't treat dropping a player pile tile at [-1, -1] as "back in original" - that's out of bounds
+    const isFromPlayerPile = updatedTile.r === -1 && updatedTile.c === -1;
+    const noChangeOrOutOfBounds = selected_r === updatedTile.r && selected_c === updatedTile.c && !isFromPlayerPile;
+    const isValidPlacement = selected_r >= 0 && selected_c >= 0 && tiles.get(getTileKey(selected_r, selected_c)) === undefined;
+
+    if (isValidPlacement || noChangeOrOutOfBounds) {
       deleteTileHelper(updatedTile.id);
       setTiles(prev => {
         const newTiles = new Map(prev);
@@ -47,19 +61,9 @@ function TileMap({ updatedTile, onPlaceTile, addTileToPlayerPile }: { updatedTil
         return newTiles;
       });
 
-    // Handle invalid placement
     } else {
-      // Note: no code needed to handle a collision when both tiles were already on TileMap,
-      // it's naturally reverted by just not updating the tiles map (not returning newTiles).
-
       // Placed from PlayerPile, so add it back (but no TileMap tile to delete)
       if ((updatedTile.r == -1 && updatedTile.c == -1)) {
-        addTileToPlayerPile(new TileData(updatedTile.id, updatedTile.letter, -1, -1));
-      }
-
-      // Placed out of bounds, so delete it and add it to PlayerPile
-      else if (selected_r == -1 && selected_c == -1) {
-        deleteTileHelper(updatedTile.id);
         addTileToPlayerPile(new TileData(updatedTile.id, updatedTile.letter, -1, -1));
       }
     }

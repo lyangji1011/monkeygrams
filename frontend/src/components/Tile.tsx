@@ -11,9 +11,9 @@ const Tile = memo(function Tile({ tile_data, onPlaceTile }: { tile_data: TileDat
 
   return (
     <Draggable
-        nodeRef={nodeRef}
-        enableUserSelectHack
-        onStop={() => onPlaceTile(tile_data)}>
+      nodeRef={nodeRef}
+      enableUserSelectHack
+      onStop={() => {onPlaceTile(tile_data.shallow_copy())}}>
       <div ref={nodeRef} className='tile'>
         {tile_data.letter}
       </div>
