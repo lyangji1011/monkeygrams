@@ -1,6 +1,7 @@
 import { usernames } from "../data/usernames.js";
 import { ServerPlayer, Username } from "../types/player.js";
 import { Room, RoomCode, RoomState, SocketId } from "../types/room.js";
+import { Tile } from "../../../shared/types/tile.js";
 
 const rooms = new Map<RoomCode, Room>();
 const socketRooms = new Map<SocketId, RoomCode>();
@@ -18,13 +19,66 @@ export function createRoom() {
 
 	rooms.set(roomCode, {
 		players: new Map(),
-    state: RoomState.LOBBY,
+		state: RoomState.LOBBY,
+		gameState: {
+			bag: [],
+			hands: new Map<string, Tile[]>(),
+		},
 	});
 	return roomCode;
 }
 
+export function tryJoinRoom(
+	roomCode: string,
+	socketId: string,
+	username: Username | null,
+) {
+	if (!checkValidRoom(roomCode)) {
+		return { ok: false as const, error: "room not found" as const };
+	}
+
+	if (roomIsFull(roomCode)) {
+		return { ok: false as const, error: "room is full" as const };
+	}
+
+	const joinedRoom = joinRoom(roomCode, socketId, username);
+
+	if (!joinedRoom) {
+		return { ok: false as const, error: "room not found" as const };
+	}
+
+	return {
+		ok: true as const,
+		roomCode,
+		joinedRoom,
+	};
+}
+
+export function setPlayerReady(
+	roomCode: string,
+	socketId: string,
+	ready: boolean,
+) {
+	const room = rooms.get(roomCode);
+	if (!room) return null;
+
+	const player = room.players.get(socketId);
+	if (!player) return null;
+
+	player.isReady = ready;
+
+	return {
+		roomCode,
+		players: getRoomPlayers(roomCode),
+	};
+}
+
 export function checkValidRoom(code: string) {
 	return rooms.has(code);
+}
+
+export function roomIsFull(code: string) {
+	return rooms.get(code)?.players.size === 8;
 }
 
 export function getRoom(code: string) {
@@ -39,19 +93,21 @@ export function getRoomPlayers(roomCode: string) {
 	}
 
 	return Array.from(room.players.values()).map((player) => ({
-    username: player.username,
-    isReady: player.isReady,
-  }));
+		username: player.username,
+		isReady: player.isReady,
+	}));
 }
 
 function getRandomUsername() {
-	return usernames[Math.floor(Math.random() * usernames.length)];
+	return `Anonymous ${usernames[Math.floor(Math.random() * usernames.length)]}`;
 }
 
 function pickUsername(room: Room) {
 	let username;
 	const takenUsernames = new Set(
-		Array.from(room.players.values()).map((player: ServerPlayer) => player.username),
+		Array.from(room.players.values()).map(
+			(player: ServerPlayer) => player.username,
+		),
 	);
 
 	do {

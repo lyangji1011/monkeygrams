@@ -1,3 +1,4 @@
+import { GameState } from "./game.js";
 import { ServerPlayer } from "./player.js";
 
 export type SocketId = string;
@@ -13,4 +14,5 @@ export enum RoomState {
 export interface Room {
 	players: Map<SocketId, ServerPlayer>;
 	state: RoomState;
+  gameState: GameState;
 }

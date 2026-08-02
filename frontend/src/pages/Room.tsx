@@ -5,6 +5,7 @@ import type { Player } from "../../../shared/types/player";
 import { RoomState } from "../../../shared/types/room";
 import Lobby from "./Lobby";
 import GamePage from "../components/GamePage";
+import type { Tile } from "../../../shared/types/tile";
 
 export default function RoomPage() {
 	const socketRef = useRef<Socket | null>(null);
@@ -15,6 +16,7 @@ export default function RoomPage() {
 	const [players, setPlayers] = useState<Player[]>([]);
 	const currentPlayer = players.find((player) => player.username === username);
 	const [roomState, setRoomState] = useState(RoomState.LOBBY);
+	const [hand, setHand] = useState<Tile[]>([]);
 
 	const apiUrl = import.meta.env.VITE_API_URL ?? "http://localhost:5001";
 	const roomStorageKey = roomCode
@@ -50,11 +52,15 @@ export default function RoomPage() {
 
 		socket.on("room-state", ({ state }) => {
 			setRoomState(state);
-			console.log(state);
 		});
 
-		socket.on("room-error", () => {
+		socket.on("hand", ({ tiles }) => {
+			setHand(tiles);
+		});
+
+		socket.on("room-error", ({ message }) => {
 			navigate("/");
+			alert(message);
 		});
 
 		return () => {
@@ -74,7 +80,7 @@ export default function RoomPage() {
 					socketRef={socketRef}
 				/>
 			)}
-			{roomState === RoomState.PLAYING && <GamePage />}
+			{roomState === RoomState.PLAYING && <GamePage hand={hand} />}
 		</>
 	);
 }

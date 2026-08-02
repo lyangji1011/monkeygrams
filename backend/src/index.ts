@@ -5,10 +5,11 @@ import {
 	checkValidRoom,
 	getRoom,
 	getRoomPlayers,
-	joinRoom,
 	leaveRoomBySocketId,
+	setPlayerReady,
+	tryJoinRoom,
 } from "./routes/rooms.js";
-import { RoomState } from "./types/room.js";
+import { startGame } from "./routes/game.js";
 
 const PORT = process.env.PORT || 5001;
 
@@ -21,18 +22,11 @@ const io = new Server(server, {
 });
 
 io.on("connection", (socket) => {
-	console.log("user connected", socket.id);
-
 	socket.on("join-room", ({ roomCode, username }) => {
-		if (!checkValidRoom(roomCode)) {
-			socket.emit("room-error", { message: "room not found" });
-			return;
-		}
+		const result = tryJoinRoom(roomCode, socket.id, username ?? null);
 
-		const joinedRoom = joinRoom(roomCode, socket.id, username ?? null);
-
-		if (!joinedRoom) {
-			socket.emit("room-error", { message: "room not found" });
+		if (!result.ok) {
+			socket.emit("room-error", { message: result.error });
 			return;
 		}
 
@@ -40,38 +34,35 @@ io.on("connection", (socket) => {
 
 		socket.emit("room-joined", {
 			roomCode,
-			username: joinedRoom.username,
-			players: joinedRoom.players,
+			username: result.joinedRoom.username,
+			players: result.joinedRoom.players,
 		});
 
 		socket.to(roomCode).emit("room-players", {
-			players: getRoomPlayers(roomCode),
+			players: result.joinedRoom.players,
 		});
 	});
 
 	socket.on("set-ready", ({ roomCode, ready }) => {
-		const room = getRoom(roomCode);
-		if (!room) return;
+		const result = setPlayerReady(roomCode, socket.id, ready);
+		if (!result) return;
 
-		const player = room.players.get(socket.id);
-		if (!player) return;
-
-		player.isReady = ready;
 		io.to(roomCode).emit("room-players", {
-			players: getRoomPlayers(roomCode),
+			players: result.players,
 		});
 	});
 
 	socket.on("start-game", ({ roomCode }) => {
-		const room = getRoom(roomCode);
-		if (!room) return;
+		const result = startGame(roomCode);
+		if (!result) return;
 
-		console.log("starting game");
-
-		room.state = RoomState.PLAYING;
 		io.to(roomCode).emit("room-state", {
-			state: room.state,
+			state: result.roomState,
 		});
+
+		for (const [socketId, hand] of result.gameState.hands.entries()) {
+			io.to(socketId).emit("hand", { tiles: hand });
+		}
 	});
 
 	socket.on("disconnect", () => {

@@ -1,16 +1,18 @@
-import PlayerPile from './PlayerPile.tsx'
-import PlayerActionZone from './PlayerActionZone.tsx'
-import type { TileData } from '../utils/TileData.ts';
+import PlayerHand from "./PlayerHand";
+import PlayerActionZone from "./PlayerActionZone";
+import type { Tile } from "../../../shared/types/tile";
 
-function GameHeader({ onPlaceTile, playerPileTiles }: { onPlaceTile: (tile: TileData) => void; playerPileTiles: TileData[] | null }) {
-  
-  return (
-    <div className="game-header">
-      <PlayerPile onPlaceTile={onPlaceTile} playerPileTiles={playerPileTiles} />
-      <PlayerActionZone />
-    </div>
-  )
-
+export default function GameHeader({
+	onPlaceTile,
+	playerHandTiles,
+}: {
+	onPlaceTile: (tile: Tile) => void;
+	playerHandTiles: Tile[] | null;
+}) {
+	return (
+		<div className="game-header">
+			<PlayerHand onPlaceTile={onPlaceTile} playerHandTiles={playerHandTiles} />
+			<PlayerActionZone />
+		</div>
+	);
 }
-
-export default GameHeader

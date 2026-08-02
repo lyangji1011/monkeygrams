@@ -1,30 +1,38 @@
-import { memo, useRef } from 'react'
-import { TileData } from '../utils/TileData'
-import DraggableLib from 'react-draggable'
-import type { DraggableProps } from 'react-draggable'
+import { memo, useRef } from "react";
+import DraggableLib from "react-draggable";
+import type { DraggableProps } from "react-draggable";
+import type { Tile as TileType } from "../../../shared/types/tile";
 
-const Draggable = DraggableLib as unknown as React.ComponentType<Partial<DraggableProps>>
+const Draggable = DraggableLib as unknown as React.ComponentType<
+	Partial<DraggableProps>
+>;
 
-const Tile = memo(function Tile({ tile_data, onPlaceTile }: { tile_data: TileData; onPlaceTile: (tile_data: TileData) => void }) {
+const Tile = memo(function Tile({
+	tile,
+	onPlaceTile,
+}: {
+	tile: TileType;
+	onPlaceTile: (tile: TileType) => void;
+}) {
+	const nodeRef = useRef<HTMLDivElement>(null);
 
-  const nodeRef = useRef<HTMLDivElement>(null)
-
-  return (
-    <Draggable
-      nodeRef={nodeRef}
-      enableUserSelectHack
-      onStop={() => {onPlaceTile(tile_data.shallow_copy())}}>
-      <div ref={nodeRef} className='tile'>
-        {tile_data.letter}
-      </div>
-    </Draggable>
-  )
-})
-
+	return (
+		<Draggable
+			nodeRef={nodeRef}
+			enableUserSelectHack
+			onStop={() => {
+				onPlaceTile(tile);
+			}}
+		>
+			<div ref={nodeRef} className="tile">
+				{tile.letter}
+			</div>
+		</Draggable>
+	);
+});
 
 function EmptyTile() {
-  return <div className='tile-empty' />
+	return <div className="tile-empty" />;
 }
 
-
-export { Tile, EmptyTile }
+export { Tile, EmptyTile };
