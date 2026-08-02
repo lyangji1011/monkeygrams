@@ -12,7 +12,7 @@ const Tile = memo(function Tile({
 	onPlaceTile,
 }: {
 	tile: TileType;
-	onPlaceTile: (e: MouseEvent, tile: TileType) => void;
+	onPlaceTile: (e: MouseEvent | null, tile: TileType) => void;
 }) {
 	const nodeRef = useRef<HTMLDivElement>(null);
 

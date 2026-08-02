@@ -6,7 +6,7 @@ export default function GameHeader({
 	onPlaceTile,
 	playerHandTiles,
 }: {
-	onPlaceTile: (e: MouseEvent, tile: Tile) => void;
+	onPlaceTile: (e: MouseEvent | null, tile: Tile) => void;
 	playerHandTiles: Tile[] | null;
 }) {
 	return (

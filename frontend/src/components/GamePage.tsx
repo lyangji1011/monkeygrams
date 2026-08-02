@@ -12,6 +12,7 @@ function GamePage({ hand }: GamePageProps) {
 	const [playerHandTiles, setPlayerHandTiles] = useState<Tile[]>(hand);
 
 	useEffect(() => {
+    // eslint-disable-next-line
 		setPlayerHandTiles(hand);
 	}, [hand]);
 
@@ -23,14 +24,14 @@ function GamePage({ hand }: GamePageProps) {
     setPlayerHandTiles(prev => prev.filter(t => t.id !== tile_data.id));
   }
 
-  function placeTileFromPlayerHandOntoTileMap(e: MouseEvent, tile_data: Tile) {
+  function placeTileFromPlayerHandOntoTileMap(e: MouseEvent | null, tile_data: Tile) {
     removeTileFromPlayerHand(tile_data);
     dropTile(e, tile_data);
   }
 
-  function dropTile(e: MouseEvent, tile_data: Tile) {
+  function dropTile(e: MouseEvent | null, tile_data: Tile) {
     // Check if dropped in Dump Zone
-    const elementsAtCursor = document.elementsFromPoint(e.clientX, e.clientY);
+    const elementsAtCursor = document.elementsFromPoint(e?.clientX || 0, e?.clientY || 0);
     const isOverDropZone = elementsAtCursor.some(el => el.classList.contains('dump-zone'));
     if (isOverDropZone) {
       console.log('DUMP!')
@@ -47,7 +48,7 @@ function GamePage({ hand }: GamePageProps) {
 			/>
 			<TileMap
 				updatedTile={currentTile}
-				onPlaceTile={setCurrentTile}
+				onPlaceTile={(_, tile) => setCurrentTile(tile)}
 				addTileToPlayerHand={addTileToPlayerHand}
 			/>
 		</div>
