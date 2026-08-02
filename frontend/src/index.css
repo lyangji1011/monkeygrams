@@ -205,4 +205,12 @@ button:hover {
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: 0.1s;
+}
+
+.dump-zone:hover {
+  transform: scale(1.05);
+  border-color: #ff0000;
+  color: #ff0000;
+  transition: 0.1s;
 }

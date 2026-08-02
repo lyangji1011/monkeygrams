@@ -14,7 +14,7 @@ function TileMap({
 	addTileToPlayerHand,
 }: {
 	updatedTile: Tile | null;
-	onPlaceTile: (tileData: Tile | null) => void;
+	onPlaceTile: (e: MouseEvent, tileData: Tile | null) => void;
 	addTileToPlayerHand: (tileData: Tile) => void;
 }) {
 	const nodeRef = useRef<HTMLDivElement>(null);
@@ -46,7 +46,7 @@ function TileMap({
 			addTileToPlayerHand(updatedTile);
 		}
 
-		onPlaceTile(null);
+		onPlaceTile(new MouseEvent("mousedown"), null);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [updatedTile]);
 

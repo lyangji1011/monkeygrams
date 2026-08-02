@@ -11,7 +11,7 @@ function PlayerHand({
 	onPlaceTile,
 	playerHandTiles,
 }: {
-	onPlaceTile: (tile: Tile) => void;
+	onPlaceTile: (e: MouseEvent, tile: Tile) => void;
 	playerHandTiles: Tile[] | null;
 }) {
 	const tileRefs = useMemo(() => {
@@ -29,7 +29,7 @@ function PlayerHand({
 					nodeRef={tileRefs.get(tile.id)!}
 					key={tile.id}
 					enableUserSelectHack
-					onStop={() => onPlaceTile(tile)}
+					onStop={(e) => onPlaceTile(e, tile)}
 				>
 					<div ref={tileRefs.get(tile.id)!} className="tile">
 						{tile.letter}

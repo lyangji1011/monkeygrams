@@ -12,7 +12,7 @@ const Tile = memo(function Tile({
 	onPlaceTile,
 }: {
 	tile: TileType;
-	onPlaceTile: (tile: TileType) => void;
+	onPlaceTile: (e: MouseEvent, tile: TileType) => void;
 }) {
 	const nodeRef = useRef<HTMLDivElement>(null);
 
@@ -20,8 +20,8 @@ const Tile = memo(function Tile({
 		<Draggable
 			nodeRef={nodeRef}
 			enableUserSelectHack
-			onStop={() => {
-				onPlaceTile(tile);
+			onStop={(e) => {
+				onPlaceTile(e, tile);
 			}}
 		>
 			<div ref={nodeRef} className="tile">

@@ -15,19 +15,30 @@ function GamePage({ hand }: GamePageProps) {
 		setPlayerHandTiles(hand);
 	}, [hand]);
 
-	function addTileToPlayerHand(tileData: Tile) {
-		setPlayerHandTiles((prev) => [...prev, tileData]);
-	}
+  function addTileToPlayerHand(tile_data: Tile) {
+    setPlayerHandTiles(prev => [...prev, tile_data]);
+  }
 
-	function removeTileFromPlayerHand(tileData: Tile) {
-		setPlayerHandTiles((prev) => prev.filter((t) => t.id !== tileData.id));
-	}
+  function removeTileFromPlayerHand(tile_data: Tile) {
+    setPlayerHandTiles(prev => prev.filter(t => t.id !== tile_data.id));
+  }
 
-	function placeTileFromPlayerHandOntoTileMap(tileData: Tile) {
-		removeTileFromPlayerHand(tileData);
-		setCurrentTile(tileData);
-	}
+  function placeTileFromPlayerHandOntoTileMap(e: MouseEvent, tile_data: Tile) {
+    removeTileFromPlayerHand(tile_data);
+    dropTile(e, tile_data);
+  }
 
+  function dropTile(e: MouseEvent, tile_data: Tile) {
+    // Check if dropped in Dump Zone
+    const elementsAtCursor = document.elementsFromPoint(e.clientX, e.clientY);
+    const isOverDropZone = elementsAtCursor.some(el => el.classList.contains('dump-zone'));
+    if (isOverDropZone) {
+      console.log('DUMP!')
+    } else {
+      // Attempt to place the tile (this triggers useEffect in TileMap)
+      setCurrentTile(tile_data);
+    }
+  }
 	return (
 		<div className="page">
 			<GameHeader
