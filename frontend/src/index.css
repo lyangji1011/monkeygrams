@@ -118,7 +118,7 @@ button:hover {
 .tilemap-stage {
   position: absolute;
   left: 50%;
-  top: 10%;
+  top: 0%;
   transform: translateX(-50%);
   width: max-content;
   z-index: 1;
@@ -167,14 +167,14 @@ button:hover {
   justify-content: center;
 }
 
-.game-header {
+.game-footer {
   width: 100%;
   position: fixed;
-  top: 0;
+  bottom: 0;
   left: 0;
   background-color: rgb(189, 187, 113);
   height: 10%;
-  box-shadow: 0px 8px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px -8px 6px rgba(0, 0, 0, 0.1);
   z-index: 2;
   display: flex;
   align-items: center;

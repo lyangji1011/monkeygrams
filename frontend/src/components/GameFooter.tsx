@@ -2,7 +2,7 @@ import PlayerHand from "./PlayerHand";
 import PlayerActionZone from "./PlayerActionZone";
 import type { Tile } from "../../../shared/types/tile";
 
-export default function GameHeader({
+export default function GameFooter({
 	onPlaceTile,
 	playerHandTiles,
 }: {
@@ -10,7 +10,7 @@ export default function GameHeader({
 	playerHandTiles: Tile[] | null;
 }) {
 	return (
-		<div className="game-header">
+		<div className="game-footer">
 			<PlayerHand onPlaceTile={onPlaceTile} playerHandTiles={playerHandTiles} />
 			<PlayerActionZone />
 		</div>

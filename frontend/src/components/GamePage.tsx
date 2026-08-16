@@ -1,5 +1,5 @@
 import TileMap from "./TileMap";
-import GameHeader from "./GameHeader";
+import GameFooter from "./GameFooter";
 import { useEffect, useState } from "react";
 import type { Tile } from "../../../shared/types/tile";
 
@@ -42,14 +42,14 @@ function GamePage({ hand }: GamePageProps) {
   }
 	return (
 		<div className="page">
-			<GameHeader
-				onPlaceTile={placeTileFromPlayerHandOntoTileMap}
-				playerHandTiles={playerHandTiles}
-			/>
 			<TileMap
 				updatedTile={currentTile}
 				onPlaceTile={(_, tile) => setCurrentTile(tile)}
 				addTileToPlayerHand={addTileToPlayerHand}
+			/>
+			<GameFooter
+				onPlaceTile={placeTileFromPlayerHandOntoTileMap}
+				playerHandTiles={playerHandTiles}
 			/>
 		</div>
 	);
