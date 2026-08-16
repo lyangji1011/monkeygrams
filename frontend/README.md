@@ -1,75 +1,52 @@
-# React + TypeScript + Vite
+## Tile Components
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### `TileMap`
+The main game board component that displays a 15x15 grid of tiles and handles tile placement/movement logic.
 
-Currently, two official plugins are available:
+**Props:**
+- `updatedTile: Tile | null` - A new tile from the player's hand to be placed on the board
+- `onPlaceTile: (e: MouseEvent | null, tileData: Tile | null) => void` - Callback when a tile placement is attempted
+- `addTileToPlayerHand: (tileData: Tile) => void` - Callback to return a tile to the player's hand
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+**State:**
+- `tiles: Map<string, Tile>` - Map of placed tiles keyed by `"row,col"`
+- `selectedTileRef` - Tracks which grid cell the mouse is currently over
 
-## React Compiler
+**Key Functions:**
+- `handleMouseMove()` - Updates `selectedTileRef` based on mouse position
+- `handleTileRemoved()` - Removes a tile from the board
+- `handleTileDragged()` - Handles tile placement logic when a tile is dropped (returns to original spot if placement is invalid)
+- `renderTile()` - Renders either a `PlacedTile` or `EmptyTile` based on whether the cell contains a tile
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### `PlacedTile`
+A single tile that has been placed on the board. Handles dragging and positioning.
 
-## Expanding the ESLint configuration
+**Props:**
+- `rowIndex: number` - Row position on the board
+- `colIndex: number` - Column position on the board
+- `tileData: Tile` - The tile data (letter, etc.)
+- `onTileRemoved: (rowIndex: number, colIndex: number) => void` - Called when drag starts
+- `onTileDragged: (tileData: Tile, origRow: number, origCol: number) => void` - Called when drag ends
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+**Behavior:**
+- Uses `react-draggable` to make tiles draggable
+- Tracks position during drag and snaps back to grid on drop
+- Calls `onTileRemoved` on drag start, then `onTileDragged` on drop with original position info
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### `Tile`
+A tile in the player's hand. Draggable and ready to be placed on the board.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+**Props:**
+- `tile: Tile` - The tile data (letter, etc.)
+- `onPlaceTile: (e: MouseEvent | null, tile: Tile) => void` - Called when the tile is dropped
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+**Behavior:**
+- Uses `react-draggable` to make the tile draggable
+- When dropped on the board, calls `onPlaceTile` with the tile data
 
-```
+### `EmptyTile`
+A visual placeholder for an empty grid cell on the board. Non-interactive.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
+**Behavior:**
+- Renders a dashed border to indicate an available placement location
+- Same dimensions as a placed tile for grid alignment

@@ -140,6 +140,8 @@ button:hover {
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
+  flex: 0 0 52px;
+  box-sizing: border-box;
 }
 
 .tile:active {
@@ -152,10 +154,12 @@ button:hover {
   width: 44px;
   height: 44px;
   border: 1px dashed rgb(189, 187, 113);
-  padding: 3.3333px;
+  padding: 3px;
   display: flex;
   justify-content: center;
   align-items: center;
+  flex: 0 0 52px;
+  box-sizing: border-box;
 }
 
 .tile-row {

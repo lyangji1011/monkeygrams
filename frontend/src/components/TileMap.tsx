@@ -2,6 +2,7 @@ import { useRef, useEffect, useState } from "react";
 import DraggableLib from "react-draggable";
 import type { DraggableProps } from "react-draggable";
 import { EmptyTile } from "./Tile";
+import PlacedTile from "./PlacedTile";
 import type { Tile } from "../../../shared/types/tile";
 
 const Draggable = DraggableLib as unknown as React.ComponentType<
@@ -71,20 +72,61 @@ function TileMap({
 		}
 	}
 
+	function handleTileRemoved(r: number, c: number) {
+		setTiles((prev) => {
+			const newTiles = new Map(prev);
+			newTiles.delete(getTileKey(r, c));
+			return newTiles;
+		});
+	}
+
+	function handleTileDragged(tile: Tile, origRow: number, origCol: number) {
+		const newRow = selectedTileRef.current[0];
+		const newCol = selectedTileRef.current[1];
+		const isSameSpot = newRow === origRow && newCol === origCol;
+		const isValidNewSpot =
+			newRow >= 0 &&
+			newCol >= 0 &&
+			tiles.get(getTileKey(newRow, newCol)) === undefined;
+
+		if (isSameSpot || !isValidNewSpot) {
+			setTiles((prev) => {
+				const newTiles = new Map(prev);
+				newTiles.set(getTileKey(origRow, origCol), tile);
+				return newTiles;
+			});
+		} else {
+			setTiles((prev) => {
+				const newTiles = new Map(prev);
+				newTiles.set(getTileKey(newRow, newCol), tile);
+				return newTiles;
+			});
+		}
+	}
+
 	function renderTile(rowIndex: number, colIndex: number) {
 		const tileData = tiles.get(getTileKey(rowIndex, colIndex));
-		return tileData ? (
-			<div key={`${rowIndex},${colIndex}`} className="tile">
-				{tileData.letter}
-			</div>
-		) : (
-			<EmptyTile key={`${rowIndex},${colIndex}`} />
-		);
+		const tileKey = `${rowIndex},${colIndex}`;
+
+		if (tileData) {
+			return (
+				<PlacedTile
+					key={tileKey}
+					rowIndex={rowIndex}
+					colIndex={colIndex}
+					tileData={tileData}
+					onTileRemoved={handleTileRemoved}
+					onTileDragged={handleTileDragged}
+				/>
+			);
+		}
+
+		return <EmptyTile key={tileKey} />;
 	}
 
 	return (
 		<div className="tilemap-stage" onMouseMove={handleMouseMove}>
-			<Draggable nodeRef={nodeRef} enableUserSelectHack cancel=".tile">
+			<Draggable nodeRef={nodeRef} enableUserSelectHack cancel=".tilemap">
 				<div ref={nodeRef} className="tilemap">
 					{Array.from({ length: SIZE }).map((_, rowIndex) => (
 						<div key={rowIndex} className="tile-row">
