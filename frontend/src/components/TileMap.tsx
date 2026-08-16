@@ -13,10 +13,14 @@ function TileMap({
 	updatedTile,
 	onPlaceTile,
 	addTileToPlayerHand,
+	onTileDumped,
+	onTileReturnedToHand,
 }: {
 	updatedTile: Tile | null;
 	onPlaceTile: (e: MouseEvent | null, tileData: Tile | null) => void;
 	addTileToPlayerHand: (tileData: Tile) => void;
+	onTileDumped?: (tileData: Tile) => void;
+	onTileReturnedToHand?: (tileData: Tile) => void;
 }) {
 	const nodeRef = useRef<HTMLDivElement>(null);
 	const selectedTileRef = useRef<[number, number]>([-1, -1]);
@@ -117,6 +121,8 @@ function TileMap({
 					tileData={tileData}
 					onTileRemoved={handleTileRemoved}
 					onTileDragged={handleTileDragged}
+					onTileDumped={onTileDumped}
+					onTileReturnedToHand={onTileReturnedToHand}
 				/>
 			);
 		}

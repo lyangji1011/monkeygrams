@@ -40,12 +40,22 @@ function GamePage({ hand }: GamePageProps) {
       setCurrentTile(tile_data);
     }
   }
+
+  function handleTileDumped(tile_data: Tile) {
+    console.log('DUMP!')
+  }
+
+  function handleTileReturnedToHand(tile_data: Tile) {
+    addTileToPlayerHand(tile_data);
+  }
 	return (
 		<div className="page">
 			<TileMap
 				updatedTile={currentTile}
 				onPlaceTile={(_, tile) => setCurrentTile(tile)}
 				addTileToPlayerHand={addTileToPlayerHand}
+				onTileDumped={handleTileDumped}
+				onTileReturnedToHand={handleTileReturnedToHand}
 			/>
 			<GameFooter
 				onPlaceTile={placeTileFromPlayerHandOntoTileMap}
