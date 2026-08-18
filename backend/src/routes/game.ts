@@ -63,7 +63,9 @@ export function dumpTile(
 	return addRandomTilesToHand(hand, bag, 3);
 }
 
-export function peel(roomCode: RoomCode) {
+export function peel(tilesOnBoard: Record<string, Tile>, roomCode: RoomCode) {
+	console.log('PEEL: ', roomCode, tilesOnBoard)
+
 	const room = getRoom(roomCode);
 	if (!room) return null;
 	const bag = room.gameState.bag;

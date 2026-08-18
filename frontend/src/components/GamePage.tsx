@@ -21,6 +21,7 @@ function GamePage({
 	onAddTileToHand,
 }: GamePageProps) {
 	const [currentTile, setCurrentTile] = useState<Tile | null>(null); // will update via useEffect in TileMap
+	const [tilesOnBoard, setTilesOnBoard] = useState<Map<string, Tile>>(new Map());
 	const dumpAudioRef = useRef<HTMLAudioElement | null>(null);
 
 	useEffect(() => {
@@ -68,10 +69,14 @@ function GamePage({
 				onPlaceTile={(_, placedTile) => setCurrentTile(placedTile)}
 				addTileToPlayerHand={onAddTileToHand}
 				onTileDumped={handleTileDumped}
+				onTilesChange={setTilesOnBoard}
 			/>
 			<GameFooter
 				onPlaceTile={placeTileFromPlayerHandOntoTileMap}
 				playerHandTiles={hand}
+				socketRef={socketRef}
+				roomCode={roomCode}
+				tilesOnBoard={tilesOnBoard}
 			/>
 		</div>
 	);

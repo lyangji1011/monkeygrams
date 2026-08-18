@@ -7,8 +7,9 @@ import {
 	leaveRoomBySocketId,
 	setPlayerReady,
 	tryJoinRoom,
+	getRoom,
 } from "./routes/rooms.js";
-import { dumpTile, startGame } from "./routes/game.js";
+import { dumpTile, startGame, peel } from "./routes/game.js";
 
 const PORT = process.env.PORT || 5001;
 
@@ -67,6 +68,16 @@ io.on("connection", (socket) => {
 	socket.on("dump", ({ tile, roomCode }) => {
 		const newTiles = dumpTile(tile, roomCode, socket.id);
 		io.to(socket.id).emit("new-tiles", { newTiles: newTiles });
+	});
+
+	socket.on("peel", ({ tilesOnBoard, roomCode }) => {
+		peel(tilesOnBoard, roomCode);		
+		const room = getRoom(roomCode);
+		if (!room) return;
+
+		for (const [socketId, hand] of room.gameState.hands.entries()) {
+			io.to(socketId).emit("new-tiles", { newTiles: [hand[hand.length - 1]] });
+		}
 	});
 
 	socket.on("disconnect", () => {
