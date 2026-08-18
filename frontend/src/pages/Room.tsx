@@ -67,8 +67,6 @@ export default function RoomPage() {
 		});
 
 		socket.on("new-tiles", ({ newTiles }) => {
-			console.log(newTiles);
-			console.log(hand.length);
 			setHand((currentHand) => [...currentHand, ...newTiles]);
 		});
 

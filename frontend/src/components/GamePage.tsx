@@ -1,8 +1,9 @@
 import TileMap from "./TileMap";
 import GameFooter from "./GameFooter";
-import { useEffect, useState, type RefObject } from "react";
+import { useState, useRef, useEffect, type RefObject } from "react";
 import type { Tile } from "../../../shared/types/tile";
 import type { Socket } from "socket.io-client";
+import dumpSound from "../assets/sounds/dump.mp3";
 
 interface GamePageProps {
 	hand: Tile[];
@@ -20,6 +21,11 @@ function GamePage({
 	onAddTileToHand,
 }: GamePageProps) {
 	const [currentTile, setCurrentTile] = useState<Tile | null>(null); // will update via useEffect in TileMap
+	const dumpAudioRef = useRef<HTMLAudioElement | null>(null);
+
+	useEffect(() => {
+		dumpAudioRef.current = new Audio(dumpSound);
+	}, []);
 
 	function placeTileFromPlayerHandOntoTileMap(
 		e: MouseEvent | null,
@@ -47,7 +53,10 @@ function GamePage({
 	}
 
 	function handleTileDumped(tile: Tile) {
-		console.log("DUMP!");
+		if (dumpAudioRef.current) {
+			dumpAudioRef.current.currentTime = 0;
+			dumpAudioRef.current.play();
+		}
 		onRemoveTileFromHand(tile);
 		socketRef.current?.emit("dump", { tile, roomCode });
 	}
