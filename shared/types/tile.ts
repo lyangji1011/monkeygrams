@@ -4,6 +4,6 @@ export interface Tile {
 }
 
 export interface PlacedTile extends Tile {
-	row: number;
-	col: number;
+	r: number;
+	c: number;
 }

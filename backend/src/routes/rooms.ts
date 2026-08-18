@@ -11,6 +11,16 @@ function getRandomLetter() {
 	return String.fromCharCode(65 + Math.floor(Math.random() * 26));
 }
 
+export function getPlayerFromSocketId(roomCode: RoomCode, socketId: SocketId) {
+	const room = rooms.get(roomCode);
+	if (!room) return null;
+
+	const player = room.players.get(socketId);
+	if (!player) return null;
+
+	return player;
+}
+
 export function createRoom() {
 	let roomCode;
 	do {
@@ -59,12 +69,8 @@ export function setPlayerReady(
 	socketId: string,
 	ready: boolean,
 ) {
-	const room = rooms.get(roomCode);
-	if (!room) return null;
-
-	const player = room.players.get(socketId);
+	const player = getPlayerFromSocketId(roomCode, socketId);
 	if (!player) return null;
-
 	player.isReady = ready;
 
 	return {

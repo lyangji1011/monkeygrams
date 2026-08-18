@@ -3,13 +3,12 @@ import app from "./app.js";
 import { Server } from "socket.io";
 import {
 	checkValidRoom,
-	getRoom,
 	getRoomPlayers,
 	leaveRoomBySocketId,
 	setPlayerReady,
 	tryJoinRoom,
 } from "./routes/rooms.js";
-import { startGame } from "./routes/game.js";
+import { dumpTile, startGame } from "./routes/game.js";
 
 const PORT = process.env.PORT || 5001;
 
@@ -63,6 +62,11 @@ io.on("connection", (socket) => {
 		for (const [socketId, hand] of result.gameState.hands.entries()) {
 			io.to(socketId).emit("hand", { tiles: hand });
 		}
+	});
+
+	socket.on("dump", ({ tile, roomCode }) => {
+		const newTiles = dumpTile(tile, roomCode, socket.id);
+		io.to(socket.id).emit("new-tiles", { newTiles: newTiles });
 	});
 
 	socket.on("disconnect", () => {

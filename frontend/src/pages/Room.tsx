@@ -23,6 +23,14 @@ export default function RoomPage() {
 		? `monkeygrams-room-${roomCode}`
 		: "monkeygrams-room";
 
+	function removeTileFromHand(tile: Tile) {
+		setHand((currentHand) => currentHand.filter((t) => t.id !== tile.id));
+	}
+
+	function addTileToHand(tile: Tile) {
+		setHand((currentHand) => [...currentHand, tile]);
+	}
+
 	useEffect(() => {
 		if (!roomCode) {
 			navigate("/");
@@ -58,6 +66,12 @@ export default function RoomPage() {
 			setHand(tiles);
 		});
 
+		socket.on("new-tiles", ({ newTiles }) => {
+			console.log(newTiles);
+			console.log(hand.length);
+			setHand((currentHand) => [...currentHand, ...newTiles]);
+		});
+
 		socket.on("room-error", ({ message }) => {
 			navigate("/");
 			alert(message);
@@ -80,7 +94,15 @@ export default function RoomPage() {
 					socketRef={socketRef}
 				/>
 			)}
-			{roomState === RoomState.PLAYING && <GamePage hand={hand} />}
+			{roomState === RoomState.PLAYING && (
+				<GamePage
+					hand={hand}
+					roomCode={roomCode}
+					socketRef={socketRef}
+					onRemoveTileFromHand={removeTileFromHand}
+					onAddTileToHand={addTileToHand}
+				/>
+			)}
 		</>
 	);
 }
