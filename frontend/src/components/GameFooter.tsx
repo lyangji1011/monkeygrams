@@ -1,6 +1,7 @@
 import PlayerHand from "./PlayerHand";
-import PlayerActionZone from "./PlayerActionZone";
+import DumpZone from "./DumpZone";
 import type { Tile } from "../../../shared/types/tile";
+import PlayerActionButtons from "./PlayerActionButtons";
 
 export default function GameFooter({
 	onPlaceTile,
@@ -11,8 +12,9 @@ export default function GameFooter({
 }) {
 	return (
 		<div className="game-footer">
+			<PlayerActionButtons />
 			<PlayerHand onPlaceTile={onPlaceTile} playerHandTiles={playerHandTiles} />
-			<PlayerActionZone />
+			<DumpZone />
 		</div>
 	);
 }
