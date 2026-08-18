@@ -55,13 +55,9 @@ export function dumpTile(
 	const room = getRoom(roomCode);
 	if (!room) return;
 	const hand = room.gameState.hands.get(socketId);
-	if (!hand) {
-		return;
-	}
+	if (!hand) return;
 	const bag = room?.gameState.bag;
-	if (!bag) {
-		return;
-	}
+	if (!bag) return;
 
 	removeTileFromHand(hand, bag, dumpedTile);
 	return addRandomTilesToHand(hand, bag, 3);
